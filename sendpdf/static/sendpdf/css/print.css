@@ -1,0 +1,44 @@
+html {
+  /*margin: 0;*/
+  /*background: rgb(204,204,204);*/
+  font: 10pt/1.26 "Gill Sans", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: white;
+  display: block;
+}
+
+/*table { font-size: 75%; table-layout: fixed; width: 100%; }*/
+/*table { border-collapse: separate; border-spacing: 2px; }*/
+.trans { font-size: 75%; table-layout: fixed; width: 100%; }
+.trans th, .trans td { border-width: 1px; padding: 0.2em; position: relative; text-align: left; }
+.trans th, .trans td { border-radius: 0.1em; border-style: solid; }
+.trans th { background: #337ab7; border-color: #337ab7; color: #fff}
+.trans td { border-color: #DDD; }
+/*#337ab7*/
+.logo {width: 100%; font-size: 90%; padding-bottom: 5px;}
+.logo table {margin: 1px 0; }
+.logo td {padding: 0; margin: 0; border: none;}
+.logo td img {text-align: right; float: right;padding: 0;margin: 0}
+
+h5.doc {background-color: #91217f; color: #FFF; text-align: center; width: 100%; margin: 0; padding-bottom: 5px; padding-top: 5px}
+
+.account {width: 100%; table-layout: fixed; font-size: 80%;}
+.account td {position: relative; text-align: left; }
+.account td.details table {text-align: left; float: left;}
+.account td.dates table {table-layout: fixed; text-align: right; float: right;}
+/*.account td.dates table th,*/
+.account td.dates table td,
+/*.account td.details table th,*/
+.account td.details table td { border-width: 1px; padding: 0.2em; position: relative; border-radius: 0.1em; border-style: solid;border-color: #DDD; }
+.account td.details table th {text-align: right;}
+
+/*.dates {text-align: right; float: right;border-bottom-width: 15px; border-bottom-color: #91217f; border-bottom-style: solid;}*/
+
+@media print {
+  * { -webkit-print-color-adjust: exact; }
+  html { background: none; padding: 0; }
+  body { box-shadow: none; margin: 0; }
+}
