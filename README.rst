@@ -10,7 +10,7 @@ Alternatively, one can send the PDF to one or many email addresses.
 
 It has been tested with Django==1.9.
 
-Detailed documentation is in the "docs" directory.
+Detailed documentation is in the `official page <http://pythonhosted.org/django-sendpdf/>`_.
 
 Quick start
 --------------
