@@ -41,7 +41,7 @@ Quick start
         'sendpdf',
     )
 
-4. In your Django settings add the location of wkhtmltopdf, default location is '/usr/local/bin/wkhtmltox/bin/wkhtmltopdf', like this::
+4. In your Django settings add the location of wkhtmltopdf, default location is **/usr/local/bin/wkhtmltox/bin/wkhtmltopdf**, like this::
 
     WKTHMLTOPDF_PATH = "wkhtmltopdf/path/here"
 
@@ -49,12 +49,12 @@ Quick start
 
     url(r'^sendpdf/', include('sendpdf.urls', namespace='sendpdf')),
 
-5. Run `python manage.py runserver` to see some demos::
+5. Run `python manage.py runserver` to see some demos:
 
-    Template example - `http://localhost:8080/sendpdf/ <http://localhost:8080/sendpdf/>`
+    `Template example <http://localhost:8080/sendpdf/>`_
 
-    View PDF inline - `http://localhost:8080/sendpdf/show/ <http://localhost:8080/sendpdf/show/>`
+    `View PDF inline <http://localhost:8080/sendpdf/show/>`_
 
-    Dewnload PDF - `http://localhost:8080/sendpdf/download/ <http://localhost:8080/sendpdf/download/>`
+    `Dewnload PDF <http://localhost:8080/sendpdf/download/>`_
 
-    Send PDF - `http://localhost:8080/sendpdf/send/ <http://localhost:8080/sendpdf/send/>`
+    `Send PDF <http://localhost:8080/sendpdf/send/>`_

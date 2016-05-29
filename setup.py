@@ -9,12 +9,11 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-sendpdf',
-    version='0.1.0',
+    version='0.1.1',
     packages=['sendpdf'],
     include_package_data=True,
     license='MIT License',
     description='Generate PDF from html templates and print, view or send via email',
-    install_requires=['Django', 'pdfkit'],
     long_description=README,
     url='http://pythonhosted.org/django-sendpdf/',
     author='James Wanderi',
@@ -22,7 +21,7 @@ setup(
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
-        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 4 - Beta",
         "Natural Language :: English",
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',

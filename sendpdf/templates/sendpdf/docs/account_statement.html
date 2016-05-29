@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+{% load pdftags %}
+<head>
+  <title></title>
+  <meta name="author" content="James Wanderi" />
+  <meta name="subject" content="Statement" />
+  <link rel="stylesheet" type="text/css" href="{% pdf_static 'sendpdf/css/print.css' pdf %}">
+</head>
+<body>
+  <table class="logo">
+    <tr>
+      <td>
+        <dt><b>My Company Ltd</b></dt>
+        <dt>&nbsp;Business Physical location <br>&nbsp;Joe Road <br>&nbsp;Nairobi - Kenya <br>&nbsp;(254) 7** *** ***</dt>
+      </td>
+      <td><img src="{% pdf_static 'sendpdf/img/logo.png' pdf %}"></td>
+    </tr>
+  </table>
+  <h5 class="doc">Statement</h5>
+
+  <table class="account">
+    <tr>
+      <td class="details">
+        <table>
+          <tr><th>Holder:</th><td>{{names}}</td></tr>
+          <tr><th>Account:</th><td>{{account}}</td></tr>
+          <tr><th>Balance:</th><td>{{balance}}</td></tr>
+        </table>
+      </td>
+      <td class="dates">
+        <table>
+          <tr><th>Date:</th><td>{{req_date}}</td></tr>
+          <tr><th>Period:</th><td>{{period}}</td></tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <table class="trans">
+    <thead>
+      <tr>
+        {% for h in headers %}
+        <th>{{h}}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in trans %}
+      <tr>
+        <td>{{t.created}}</td>
+        <td>{{t.direction}}</td>
+        <td>{{t.reason}}</td>
+        <td>{{t.reference}}</td>
+        <td>{{t.transaction_value}}</td>
+        <td>{{t.agent_balance}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</body>
+</html>

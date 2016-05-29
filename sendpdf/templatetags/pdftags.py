@@ -7,6 +7,7 @@ register = template.Library()
 
 @register.simple_tag
 def pdf_static(static_url, pdf=None):
+    print pdf
     if pdf is not None:
         return os.path.join(settings.BASE_DIR, "sendpdf/static/{}".format(static_url))
     return "/static/{}".format(static_url)
