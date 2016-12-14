@@ -29,8 +29,8 @@ def demo_data(qty=2000):
 class ShowDemo(ShowPDF):
     """Demo for viewing a PDF document inline.
 
-    Once installed and running go to `http://llocalhost:8080/sendpdf/show/ <http://llocalhost:8080/sendpdf/show/>_`
-    """
+    Once installed and running go to `http://127.0.0.1:8000/sendpdf/show/ <http://127.0.0.1:8000/sendpdf/show/>`_"""
+
     pdf_filename = "account_statement"
     pdf_template = "account_statement.html"
     context = demo_data()
@@ -39,7 +39,8 @@ class ShowDemo(ShowPDF):
 class DownloadDemo(DownloadPDF):
     """Demo for downloading a PDF document.
 
-    Once installed and running go to `http://llocalhost:8080/sendpdf/download <http://llocalhost:8080/sendpdf/download/>`_"""
+    Once installed and running go to `http://127.0.0.1:8000/sendpdf/download <http://127.0.0.1:8000/sendpdf/download/>`_"""
+    
     pdf_filename = "account_statement"
     pdf_template = "account_statement.html"
 
@@ -49,7 +50,7 @@ class SendDemo(View):
 
     Make sure you use a valid email addressing for testing.
 
-    Once installed and running go to `http://llocalhost:8080/sendpdf/send/ <http://llocalhost:8080/sendpdf/send/>`_"""
+    Once installed and running go to `http://127.0.0.1:8000/sendpdf/send/ <http://127.0.0.1:8000/sendpdf/send/>`_"""
 
     def get(self, *args, **kwargs):
         s = GeneratePDF(template="account_statement.html")
@@ -63,7 +64,7 @@ class SendDemo(View):
 class TemplateDesign(View):
     """HTML view for the demo template to be used for PDF generation
 
-    Once installed and running go to `http://llocalhost:8080/sendpdf/ <http://llocalhost:8080/sendpdf/>`_"""
+    Once installed and running go to `http://127.0.0.1:8000/sendpdf/ <http://127.0.0.1:8000/sendpdf/>`_"""
 
     def get(self, request):
         params = demo_data(20)
