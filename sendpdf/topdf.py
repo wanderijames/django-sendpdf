@@ -8,7 +8,7 @@ from django.template import TemplateDoesNotExist
 from django.views.generic.base import TemplateResponseMixin
 import pdfkit
 
-#settings.configure() #: I use this during sphinx document generation
+settings.configure() #: I use this during sphinx document generation
 
 path_wkthmltopdf = getattr(
     settings, "WKTHMLTOPDF_PATH", "/usr/local/bin/wkhtmltox/bin/wkhtmltopdf")
