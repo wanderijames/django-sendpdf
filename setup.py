@@ -9,9 +9,15 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-sendpdf',
-    version='0.1.1',
+    version='0.1.2',
     packages=['sendpdf'],
     include_package_data=True,
+    install_requires = [
+        'pdfkit'
+    ],
+    # package_data={
+    #     'sendpdf': ['static', 'templates', 'templatetags']
+    # },  
     license='MIT License',
     description='Generate PDF from html templates and print, view or send via email',
     long_description=README,
