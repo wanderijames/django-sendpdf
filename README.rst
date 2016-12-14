@@ -10,7 +10,7 @@ Alternatively, one can send the PDF to one or many email addresses.
 
 It has been tested with Django==1.9.
 
-Detailed documentation is in the `official page <http://pythonhosted.org/django-sendpdf/>`_.
+Detailed documentation is in the `official page <http://django-sendpdf.readthedocs.io/en/latest>`_.
 
 Quick start
 --------------
@@ -51,10 +51,10 @@ Quick start
 
 5. Run `python manage.py runserver` to see some demos:
 
-    `Template example <http://localhost:8080/sendpdf/>`_
+    `Template example <http://127.0.0.1:8000/sendpdf/>`_
 
-    `View PDF inline <http://localhost:8080/sendpdf/show/>`_
+    `View PDF inline <http://127.0.0.1:8000/sendpdf/show/>`_
 
-    `Dewnload PDF <http://localhost:8080/sendpdf/download/>`_
+    `Dewnload PDF <http://127.0.0.1:8000/sendpdf/download/>`_
 
-    `Send PDF <http://localhost:8080/sendpdf/send/>`_
+    `Send PDF <http://127.0.0.1:8000/sendpdf/send/>`_

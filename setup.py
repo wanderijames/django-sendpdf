@@ -21,7 +21,7 @@ setup(
     license='MIT License',
     description='Generate PDF from html templates and print, view or send via email',
     long_description=README,
-    url='http://pythonhosted.org/django-sendpdf/',
+    url='http://django-sendpdf.readthedocs.io/en/latest',
     download_url='https://github.com/kutakitu/django-sendpdf/tarball/0.1.3',
     keywords = ['django', 'PDF', 'create', 'templates'],
     author='James Wanderi',
