@@ -1,3 +1,4 @@
+"""TO PDF helpers"""
 from io import StringIO
 from django import http
 from django.conf import settings
@@ -10,10 +11,12 @@ import pdfkit
 
 # settings.configure() #: I use this during sphinx document generation
 
-path_wkthmltopdf = getattr(
+WKTHMLTOPDF_PATH = getattr(
     settings, "WKTHMLTOPDF_PATH", "/usr/local/bin/wkhtmltox/bin/wkhtmltopdf")
-config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
+PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf=WKTHMLTOPDF_PATH)
 
+# pylint: disable=too-many-arguments
+# pylint:disable=protected-access
 
 class GeneratePDF:
     """PDF generator"""
@@ -32,22 +35,22 @@ class GeneratePDF:
         html = self.template.render(ctxt)
         self.pdf = pdfkit.from_file(
             StringIO(html),
-            False, options=self.pdf_options, configuration=config)
+            False, options=self.pdf_options, configuration=PDFKIT_CONFIG)
         return self.pdf
 
     def download(self):
         """download the PDF document generated"""
         response = http.HttpResponse(content_type='application/pdf')
-        response[
-            'Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(self.filename)
+        response['Content-Disposition'] = \
+            'attachment; filename="{}.pdf"'.format(self.filename)
         response.write(self.pdf)
         return response
 
     def inline(self):
         """view the in the browser"""
         response = http.HttpResponse(content_type='application/pdf')
-        response[
-            'Content-Disposition'] = 'inline; filename="{}.pdf"'.format(self.filename)
+        response['Content-Disposition'] = \
+            'inline; filename="{}.pdf"'.format(self.filename)
         response.write(self.pdf)
         return response
 
@@ -57,7 +60,7 @@ class GeneratePDF:
             email_template,
             ctxt,
             from_email=getattr(settings, "DEFAULT_FROM_EMAIL"),
-            to=("valid_email",),
+            to_email=("valid_email",),
             **kwargs):
         """Send the PDF to one or more email addresses.
 
@@ -86,7 +89,8 @@ class GeneratePDF:
            in the `email_template`.
 
            from_email (Optional[str]) - A valid email address that is allowed
-           to send email. By default it is defined at the Django settins `DEFAULT_FROM_EMAIL`.
+           to send email.
+           By default it is defined at the Django settins `DEFAULT_FROM_EMAIL`.
 
            to (tuple) - A tuple of the recipients' email addresses.
 
@@ -98,9 +102,15 @@ class GeneratePDF:
                 >>> class SendDemo(View):
                         def get(self, *args, **kwargs):
                             s = GeneratePDF(template="account_statement.html")
-                            s._make_pdf(ctxt=demo_data(20), filename="account_statement")
+                            s._make_pdf(
+                                ctxt=demo_data(20),
+                                filename="account_statement")
                             email_ctx = {"name": "John Doe", "month": "April"}
-                            s.send_pdf(subject="Monthly statement", email_template="statement", ctxt=email_ctx, to=("john@doe.com",))
+                            s.send_pdf(
+                                subject="Monthly statement",
+                                email_template="statement",
+                                ctxt=email_ctx,
+                                to_email=("john@doe.com",))
                             return http.HttpResponse("Email sent")
 
 
@@ -108,7 +118,7 @@ class GeneratePDF:
         message_text = get_template(
             "sendpdf/email/{}.txt".format(email_template)).render(ctxt)
         email_message = EmailMultiAlternatives(
-            subject, message_text, from_email, to, **kwargs)
+            subject, message_text, from_email, to_email, **kwargs)
 
         try:
             message_html = get_template(
@@ -191,6 +201,7 @@ class DownloadPDF(PDFResponseMixin, View):
                     context = demo_data()
     """
     def get(self, request, *args, **kwargs):
+        # pylint: disable=unused-argument
         self.get_pdf()
         return self.pdfgen.download()
 
@@ -217,5 +228,6 @@ class ShowPDF(PDFResponseMixin, View):
                     context = demo_data()
     """
     def get(self, request, *args, **kwargs):
+        # pylint: disable=unused-argument
         self.get_pdf()
         return self.pdfgen.inline()

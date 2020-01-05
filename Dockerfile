@@ -41,3 +41,4 @@ RUN bash -c "curl -o ${WKHL} -SL https://github.com/wkhtmltopdf/wkhtmltopdf/rele
     && bash -c "apt install -y ./${WKHL}" \
     bash -c "rm ./${WKHL}"
 RUN pip install tox tox-pyenv django==3.0
+RUN pyenv local 3.7.6 3.8.1

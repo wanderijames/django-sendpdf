@@ -1,4 +1,3 @@
-"""You have to set BASE_DIR = os.path.dirname(os.path.dirname(__file__)) in django.conf.settings and in  load pdftags in your templates"""
 import os
 from django import template
 register = template.Library()

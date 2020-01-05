@@ -1,5 +1,7 @@
 .DS_Store
 .idea/
+.tox/
+.coverage
 Pipfile
 *.egg-info
 *.py[co]

@@ -1,5 +1,5 @@
 from django.test import TestCase
-from topdf import GeneratePDF
+from sendpdf.topdf import GeneratePDF
 
 
 class SendpdfTestCase(TestCase):
@@ -8,4 +8,3 @@ class SendpdfTestCase(TestCase):
 
         gen = GeneratePDF()
         gen._make_pdf({})
-        self.assertEqual('Able', 'Able')
