@@ -21,6 +21,7 @@ jobs:
       - run:
           name: Run Tests
           command: |
+            docker pull wanderijames/django-sendpdf
             docker run -t --rm --name tests --volume=$(pwd):/usr/local/lib/django-sendpdf wanderijames/django-sendpdf bash -c "cd /usr/local/lib/django-sendpdf && tox"
 
 workflows:
