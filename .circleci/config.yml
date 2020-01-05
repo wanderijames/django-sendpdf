@@ -4,7 +4,6 @@ executors:
   basic-executor:
     working_directory: ~/circleci-django-sendpdf
     machine:
-      docker_layer_caching: true
       image: circleci/classic:201808-01
 
 aliases:
