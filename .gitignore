@@ -6,4 +6,5 @@
 Pipfile
 *.egg-info
 *.py[co]
+*.sqlite3
 __pycache__

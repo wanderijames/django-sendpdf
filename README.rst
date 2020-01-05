@@ -8,9 +8,12 @@ It can handle images and css very well. The generated PDF can then be displayed 
 
 Alternatively, one can send the PDF to one or many email addresses.
 
-It has been tested with Django==1.9.
+Has been tested with Django 3+. Versions prior to 2.0.0 has been tested with Django==1.9.
 
 Detailed documentation is in the `official page <http://django-sendpdf.readthedocs.io/en/latest>`_.
+
+Checkout the latest code in the repo `wanderijames/django-sendpdf <https://github.com/wanderijames/django-sendpdf>`_
+and use docker and docker compose to test its functionality.
 
 Quick start
 --------------
