@@ -1,0 +1,31 @@
+version: 2.1
+
+executors:
+  basic-executor:
+    working_directory: ~/circleci-django-sendpdf
+    machine:
+      docker_layer_caching: true
+      image: circleci/classic:201808-01
+
+aliases:
+  - &step_attach_workspace
+    attach_workspace:
+      at: ~/circleci-django-sendpdf/tmp
+
+jobs:
+  build:
+    executor:
+      name: basic-executor
+    steps:
+      - checkout
+      - *step_attach_workspace
+      - run:
+          name: Run Tests
+          command: |
+            docker run -t --rm --name tests --volume=$(pwd):/usr/local/lib/django-sendpdf wanderijames/django-sendpdf bash -c "cd /usr/local/lib/django-sendpdf && tox"
+
+workflows:
+  version: 2
+  image_builds:
+    jobs:
+      - build

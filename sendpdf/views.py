@@ -1,4 +1,5 @@
 """Sample View for the app"""
+# pylint: disable=protected-access
 from datetime import datetime
 from collections import namedtuple
 from django import http
@@ -77,14 +78,19 @@ class SendDemo(View):
 
     def get(self, *args, **kwargs):
         """Sample view for sending an attachement via email"""
+        # pylint: disable=unused-argument,no-self-use
         pdfgen = GeneratePDF(template="account_statement.html")
         pdfgen._make_pdf(ctxt=demo_data(20), filename="account_statement")
         email_ctx = {"name": "John Doe", "month": "April"}
-        pdfgen.send_pdf(
-            subject="Monthly statement",
-            email_template="statement",
-            ctxt=email_ctx,
-            to_email=("john@doe.com",))
+        try:
+            pdfgen.send_pdf(
+                subject="Monthly statement",
+                email_template="statement",
+                ctxt=email_ctx,
+                to_email=("john@doe.com",))
+        except OSError as err:
+            return http.HttpResponse("Email not sent: {}".format(err))
+
         return http.HttpResponse("Email sent")
 
 

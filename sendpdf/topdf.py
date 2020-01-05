@@ -18,6 +18,7 @@ PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf=WKTHMLTOPDF_PATH)
 # pylint: disable=too-many-arguments
 # pylint:disable=protected-access
 
+
 class GeneratePDF:
     """PDF generator"""
 
@@ -92,11 +93,10 @@ class GeneratePDF:
            to send email.
            By default it is defined at the Django settins `DEFAULT_FROM_EMAIL`.
 
-           to (tuple) - A tuple of the recipients' email addresses.
+           to_email (tuple) - A tuple of the recipients' email addresses.
 
         Examples:
            Suppose you want to send generated PDF to `john@doe.com`::
-                >>> from django import http
                 >>> from django.views.generic import View
                 >>> from sendpdf.topdf import GeneratePDF
                 >>> class SendDemo(View):
@@ -166,12 +166,14 @@ class PDFResponseMixin(TemplateResponseMixin):
     pdf = None
 
     def get_pdfgen(self):
+        """Construct pdf maker"""
         if self.pdfgen is not None:
             return self.pdfgen
         self.pdfgen = GeneratePDF(self.pdf_template)
         return self.pdfgen
 
     def get_pdf(self):
+        """Construct pdf"""
         if self.pdf is not None:
             return self.pdf
         pdfg = self.get_pdfgen()
@@ -201,6 +203,7 @@ class DownloadPDF(PDFResponseMixin, View):
                     context = demo_data()
     """
     def get(self, request, *args, **kwargs):
+        """Sample view for downloading PDF"""
         # pylint: disable=unused-argument
         self.get_pdf()
         return self.pdfgen.download()
@@ -228,6 +231,7 @@ class ShowPDF(PDFResponseMixin, View):
                     context = demo_data()
     """
     def get(self, request, *args, **kwargs):
+        """Sample pdf for showing PDF"""
         # pylint: disable=unused-argument
         self.get_pdf()
         return self.pdfgen.inline()
