@@ -43,11 +43,11 @@ Quick start
 
 4. In your Django settings add the location of wkhtmltopdf, default location is **/usr/local/bin/wkhtmltox/bin/wkhtmltopdf**, like this::
 
-    WKTHMLTOPDF_PATH = "wkhtmltopdf/path/here"
+    WKTHMLTOPDF_PATH = "/usr/local/bin/wkhtmltopdf"
 
 4. Include the sendpdf URLconf in your project urls.py like this::
 
-    url(r'^sendpdf/', include('sendpdf.urls', namespace='sendpdf')),
+    path(r'^sendpdf/', include('sendpdf.urls', namespace='sendpdf')),
 
 5. Run `python manage.py runserver` to see some demos:
 

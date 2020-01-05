@@ -4,4 +4,4 @@ include README.rst
 # Include the data files
 recursive-include sendpdf/static *
 recursive-include sendpdf/templates *
-recursive-include sendpdf/templatetags *
+recursive-include docs *

@@ -1,0 +1,171 @@
+version: 2.1
+
+executors:
+  basic-executor:
+    working_directory: ~/circleci-ds-valkyrie
+    environment:
+      AWS_SHARED_CREDENTIALS_FILE: /home/circleci/circleci-ds-valkyrie/tmp/.aws
+      AWS_DEFAULT_REGION: "eu-west-1"
+    machine:
+      docker_layer_caching: true
+      image: circleci/classic:201808-01
+
+aliases:
+  - &step_attach_workspace
+    attach_workspace:
+      at: ~/circleci-ds-valkyrie/tmp
+  - &aws
+    run:
+      name: Setup AWS
+      command: |
+        echo "[default]" > $AWS_SHARED_CREDENTIALS_FILE
+        echo "aws_access_key_id = ${aws_access_key_id}" >> $AWS_SHARED_CREDENTIALS_FILE
+        echo "aws_secret_access_key = ${aws_secret_access_key}" >> $AWS_SHARED_CREDENTIALS_FILE
+        echo "region=${AWS_DEFAULT_REGION}" >> $AWS_SHARED_CREDENTIALS_FILE
+  - &awscli
+    run:
+      name: Install AWS CLI
+      command: |
+        pyenv versions
+        pyenv global 3.6.5
+        mkdir -p ~/circleci-ds-valkyrie/tmp
+        python3.6 -m venv ~/circleci-ds-valkyrie/tmp/venv
+        . ~/circleci-ds-valkyrie/tmp/venv/bin/activate
+        pip install awscli
+  - &awscli_env
+    run:
+      name: Activate AWS CLI
+      command: |
+        pyenv versions
+        pyenv global 3.6.5
+        . ~/circleci-ds-valkyrie/tmp/venv/bin/activate
+  - &image
+    run:
+      name: Setup Image name
+      command: |
+        AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query 'Account')
+        FULL_IMAGE_NAME=${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-1.amazonaws.com/de-team/ds-valkyrie-worker
+        echo "export AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" >> $BASH_ENV
+        echo "export FULL_IMAGE_NAME=${FULL_IMAGE_NAME}" >> $BASH_ENV
+        eval $(aws ecr get-login --no-include-email --region $AWS_REGION_EU --registry-ids $AWS_ACCOUNT_ID)
+
+
+
+jobs:
+  build:
+    executor:
+      name: basic-executor
+    steps:
+      - checkout
+      - *step_attach_workspace
+      - run:
+          name: Install test requirements
+          command: |
+            pyenv versions
+            pyenv global 3.6.5
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install tox
+
+      # Run tests
+      # Not running any tests at the moment
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            # tox
+
+  build_docker_image_for_production:
+    executor:
+      name: basic-executor
+    steps:
+      - checkout
+      - *step_attach_workspace
+      - *aws
+      - *awscli
+      - *awscli_env
+      - *image
+      - run:
+          name: Build the image
+          type: shell
+          no_output_timeout: 1440m
+          command: |
+            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+            chmod a+x bin/set_renviron.sh
+            ./bin/set_renviron.sh
+
+            docker build -t ${FULL_IMAGE_NAME}:latest -f ./docker/latest/Dockerfile .
+
+            rm -f .Renviron
+      - run:
+          name: Test
+          type: shell
+          no_output_timeout: 20m
+          command: |
+            docker run --rm --name test --volume=bin:/home/rstudio/ds-valkyrie/bin --volume=${AWS_SHARED_CREDENTIALS_FILE}:/tmp/.aws  -e AWS_SHARED_CREDENTIALS_FILE=/tmp/.aws ${FULL_IMAGE_NAME}:latest Rscript --verbose ./src/DagOperators/recency_validation.R scorecard_mtn_gh_access_rb6plus_aug18-20191002115536
+      - run:
+          name: Push Base Image to AWS ECR
+          type: shell
+          no_output_timeout: 20m
+          command: |
+            docker push ${FULL_IMAGE_NAME}:latest
+
+  test_docker_run:
+    executor:
+      name: basic-executor
+    steps:
+      - checkout
+      - *step_attach_workspace
+      - *aws
+      - *awscli
+      - *awscli_env
+      - *image
+      - run:
+          name: Run
+          type: shell
+          no_output_timeout: 1440m
+          command: |
+            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+            docker run --rm --name test --volume=bin:/home/rstudio/ds-valkyrie/bin --volume=${AWS_SHARED_CREDENTIALS_FILE}:/tmp/.aws  -e AWS_SHARED_CREDENTIALS_FILE=/tmp/.aws ${FULL_IMAGE_NAME}:latest Rscript --verbose ./src/DagOperators/recency_validation.R scorecard_mtn_gh_access_rb6plus_aug18-20191002115536
+
+  deploy_to_prod:
+    executor:
+      name: basic-executor
+    steps:
+      - checkout
+      - *step_attach_workspace
+      - *aws
+      - *awscli
+      - *awscli_env
+      - *image
+      - run:
+          name: Run tests
+          type: shell
+          no_output_timeout: 120m
+          command: |
+            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+            docker run --rm --name test --volume=bin:/home/rstudio/ds-valkyrie/bin --volume=${AWS_SHARED_CREDENTIALS_FILE}:/tmp/.aws  -e AWS_SHARED_CREDENTIALS_FILE=/tmp/.aws ${FULL_IMAGE_NAME}:latest Rscript --verbose ./src/DagOperators/recency_validation.R scorecard_mtn_gh_access_rb6plus_aug18-20191002115536
+      - run:
+          name: Deploy dags to an S3 location
+          type: shell
+          no_output_timeout: 120m
+          command: |
+            aws s3 sync dags s3://data-pipeline-jumo-world/airflow/decision-science-airflow/dags --delete
+
+workflows:
+  version: 2
+  image_builds:
+    jobs:
+      - build_docker_image_for_production:
+          filters:
+            branches:
+              only:
+                - image
+                - image_dev
+  ci_deploy:
+    jobs:
+      - deploy_to_prod:
+          filters:
+            branches:
+              only:
+                - master
