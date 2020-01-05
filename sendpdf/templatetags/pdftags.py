@@ -1,12 +1,23 @@
-"""You have to set BASE_DIR = os.path.dirname(os.path.dirname(__file__)) in django.conf.settings and in  load pdftags in your templates"""
+"""Template tags for the app"""
+# pylint: disable=invalid-name
 import os
-from django.conf import settings
 from django import template
 register = template.Library()
+
+_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
 @register.simple_tag
 def pdf_static(static_url, pdf=None):
+    """Static files access
+
+    Ensure they are accessed when rendering page as HTML and as PDF"""
     if pdf is not None:
-        return os.path.join(settings.BASE_DIR, "sendpdf/static/{}".format(static_url))
+        file = os.path.join(
+            _DIR,
+            os.pardir,
+            "static",
+            static_url
+        )
+        return file
     return "/static/{}".format(static_url)

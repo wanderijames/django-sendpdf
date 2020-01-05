@@ -1,0 +1,9 @@
+.DS_Store
+.idea/
+.tox/
+.coverage
+.python-version
+Pipfile
+*.egg-info
+*.py[co]
+__pycache__

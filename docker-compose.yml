@@ -1,0 +1,11 @@
+
+version: '3'
+services:
+  app:
+    container_name: django-sendpdf
+    image: wanderijames/django-sendpdf
+    command: bash -c "cd /usr/local/lib/django-sendpdf && pip install -e . && cd example_project && python manage.py runserver 0.0.0.0:8001"
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/usr/local/lib/django-sendpdf
